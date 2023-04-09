@@ -10,8 +10,7 @@ use App\Models\Revenue;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExpensesExport;
 use App\Exports\RevenuesExport;
-
-
+use Barryvdh\DomPDF\Facade;
 class ReportController extends Controller
 {
     public function index(Request $request)
@@ -59,70 +58,75 @@ class ReportController extends Controller
         return Excel::download(new RevenuesExport($fromDate, $toDate, $revenues,$totalRevenues), $fileName);
     }
 
-//    public function expenseViewPDF(Request $request)
-//    {
-//        $fromDate = $request->input('from_date');
-//        $toDate = $request->input('to_date');
-//
-//        $expenses = Expense::with('category')->whereBetween('date', [$fromDate, $toDate])->get();
-//        $totalExpenses = Expense::whereBetween('date', [$fromDate, $toDate])->sum('nominal');
-//
-//        $data = [
-//            'expenses' => $expenses,
-//            'totalExpenses' => $totalExpenses,
-//        ];
-//        $pdf = PDF::loadView('backend.reports.pdf', $data);
-//        return $pdf->stream();
-//    }
-//
-//    public function expenseDownloadPDF(Request $request)
-//    {
-//        $fromDate = $request->input('from_date');
-//        $toDate = $request->input('to_date');
-//
-//        $expenses = Expense::with('category')->whereBetween('date', [$fromDate, $toDate])->get();
-//        $totalExpenses = Expense::whereBetween('date', [$fromDate, $toDate])->sum('nominal');
-//
-//        $data = [
-//            'expenses' => $expenses,
-//            'totalExpenses' => $totalExpenses,
-//        ];
-//
-//        $pdf = PDF::loadView('backend.reports.pdf', $data);
-//        return $pdf->download('report.pdf');
-//    }
-//
-//    public function revenuesViewPDF(Request $request)
-//    {
-//        $fromDate = $request->input('from_date');
-//        $toDate = $request->input('to_date');
-//
-//        $revenues = Revenue::with('category')->whereBetween('date', [$fromDate, $toDate])->get();
-//        $totalRevenues = Revenue::whereBetween('date', [$fromDate, $toDate])->sum('nominal');
-//
-//        $data = [
-//            'revenues' => $revenues,
-//            'totalRevenues' => $totalRevenues,
-//        ];
-//        $pdf = PDF::loadView('backend.reports.pdf', $data);
-//        return $pdf->stream();
-//    }
-//
-//
-//    public function revenuesDownloadPDF(Request $request)
-//    {
-//        $fromDate = $request->input('from_date');
-//        $toDate = $request->input('to_date');
-//
-//        $revenues = Revenue::with('category')->whereBetween('date', [$fromDate, $toDate])->get();
-//        $totalRevenues = Revenue::whereBetween('date', [$fromDate, $toDate])->sum('nominal');
-//
-//        $data = [
-//            'revenues' => $revenues,
-//            'totalRevenues' => $totalRevenues,
-//        ];
-//
-//        $pdf = PDF::loadView('backend.reports.pdf', $data);
-//        return $pdf->download('report.pdf');
-//    }
+    public function viewExpensesPdf(Request $request)
+    {
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+
+        // Get expenses based on the date range
+        $expenses = Expense::whereBetween('date', [$fromDate, $toDate])->get();
+
+        // Calculate total expenses
+        $totalExpenses = $expenses->sum('nominal');
+
+        // Generate PDF view
+        $pdf = Facade\Pdf::loadView('backend.pages.reports.expenses-pdf', compact('expenses', 'totalExpenses', 'fromDate', 'toDate'));
+
+        // Return the view PDF in new tab
+        return $pdf->stream('expenses-report.pdf');
+    }
+
+    public function downloadExpensesPdf(Request $request)
+    {
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+
+        // Get expenses based on the date range
+        $expenses = Expense::whereBetween('date', [$fromDate, $toDate])->get();
+
+        // Calculate total expenses
+        $totalExpenses = $expenses->sum('nominal');
+
+        // Generate PDF view
+        $pdf = Facade\Pdf::loadView('backend.pages.reports.expenses-pdf', compact('expenses', 'totalExpenses', 'fromDate', 'toDate'));
+
+        // Return the PDF as download file
+        return $pdf->download('expenses-report.pdf');
+    }
+
+    public function viewRevenuesPdf(Request $request)
+    {
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+
+        // Get revenues based on the date range
+        $revenues = Revenue::whereBetween('date', [$fromDate, $toDate])->get();
+
+        // Calculate total revenues
+        $totalRevenues = $revenues->sum('nominal');
+
+        // Generate PDF view
+        $pdf = Facade\Pdf::loadView('backend.pages.reports.revenues-pdf', compact('revenues', 'totalRevenues', 'fromDate', 'toDate'));
+
+        // Return the view PDF in new tab
+        return $pdf->stream('revenues-report.pdf');
+    }
+
+    public function downloadRevenuesPdf(Request $request)
+    {
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+
+        // Get revenues based on the date range
+        $revenues = Revenue::whereBetween('date', [$fromDate, $toDate])->get();
+
+        // Calculate total revenues
+        $totalRevenues = $revenues->sum('nominal');
+
+        // Generate PDF view
+        $pdf = Facade\Pdf::loadView('backend.pages.reports.revenues-pdf', compact('revenues', 'totalRevenues', 'fromDate', 'toDate'));
+
+        // Return the PDF as download file
+        return $pdf->download('revenues-report.pdf');
+    }
 }

@@ -39,12 +39,12 @@ Route::get('/expenses/export', [ReportController::class, 'exportExpenses'])->nam
 Route::get('/revenues/export', [ReportController::class, 'exportRevenues'])->name('revenues.export');
 
 
-////expenses view and download pdf
-//Route::get('/expenses/view-pdf', [ReportController::class, 'expenseViewPDF'])->name('expense.viewpdf');
-//Route::get('/expenses/download-pdf', [ReportController::class, 'expenseDownloadPDF'])->name('expense.downloadpdf');
-////revenues view and download pdf
-//Route::get('/revenues/view-pdf', [ReportController::class, 'revenuesViewPDF'])->name('revenues.viewpdf');
-//Route::get('/revenues/download-pdf', [ReportController::class, 'revenuesDownloadPDF'])->name('revenues.downloadpdf');
+//expenses view and download pdf
+Route::get('/expenses/view-pdf', [ReportController::class, 'viewExpensesPdf'])->name('expense.viewpdf');
+Route::get('/expenses/download-pdf', [ReportController::class, 'downloadExpensesPdf'])->name('expense.downloadpdf');
+//revenues view and download pdf
+Route::get('/revenues/view-pdf', [ReportController::class, 'viewRevenuesPdf'])->name('revenues.viewpdf');
+Route::get('/revenues/download-pdf', [ReportController::class, 'downloadRevenuesPdf'])->name('revenues.downloadpdf');
 
 
 

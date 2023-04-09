@@ -52,6 +52,8 @@
             </table>
             <div class="text-center">
                 <a href="{{ route('expenses.export', ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" class="btn btn-success">Export Expenses</a>
+                <a href="{{ route('expense.viewpdf', ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" target="_blank" class="btn btn-primary">View Expenses PDF</a>
+                <a href="{{ route('expense.downloadpdf', ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" class="btn btn-primary">Download Expenses PDF</a>
             </div>
         </div>
 
@@ -61,7 +63,7 @@
                 <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Source</th>
+                    <th>Sources</th>
                     <th>Explanation</th>
                     <th>Amount</th>
                     <th>Category</th>
@@ -85,6 +87,8 @@
             </table>
             <div class="text-center">
                 <a href="{{ route('revenues.export' , ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" class="btn btn-success">Export Revenues</a>
+                <a href="{{ route('revenues.viewpdf', ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" target="_blank" class="btn btn-primary">View Revenues PDF</a>
+                <a href="{{ route('revenues.downloadpdf', ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" class="btn btn-primary">Download Revenues PDF</a>
             </div>
         </div>
     @endif
